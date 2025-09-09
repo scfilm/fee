@@ -1,0 +1,274 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { Check, Sparkles, Rocket, Shield, MessageCircle, ArrowRight, Zap, Film, Clapperboard, Layers, Workflow } from "lucide-react";
+
+// Apple-like landing page for 黑洞AI编剧工作室（中文）
+// Tailwind + shadcn/ui ready. Single-file React component.
+
+export default function LandingPage() {
+  return (
+    <div className="min-h-screen w-full bg-black text-white">
+      {/* Nav */}
+      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/40 bg-black/60 border-b border-white/10">
+        <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-7 w-7 rounded-xl bg-gradient-to-br from-white/90 to-white/60 flex items-center justify-center text-black font-extrabold">黑</div>
+            <span className="font-semibold tracking-tight">黑洞AI编剧工作室</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8 text-sm text-white/80">
+            <a href="#pricing" className="hover:text-white">报价</a>
+            <a href="#features" className="hover:text-white">能力</a>
+            <a href="#process" className="hover:text-white">流程</a>
+            <a href="#faq" className="hover:text-white">FAQ</a>
+            <a href="#contact" className="hover:text-white">联系</a>
+          </div>
+          <a href="#contact" className="inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-2 text-sm font-medium hover:opacity-90 transition"><Sparkles className="h-4 w-4"/>立即咨询</a>
+        </nav>
+      </header>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,255,255,0.09),_transparent_45%),_radial-gradient(ellipse_at_bottom_left,_rgba(255,255,255,0.06),_transparent_40%)]"/>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.6}} className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80 mb-6">
+              <Zap className="h-3.5 w-3.5"/> 150+ 创作工具包 · 全流程智能协作
+            </div>
+            <h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-tight">以电影工业化标准，
+              <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">一站式定制你的剧本</span>
+            </h1>
+            <p className="mt-6 text-base md:text-lg text-white/70 max-w-3xl mx-auto">
+              黑洞AI的使命是解放编剧、导演、制片人的决策压力，用 <span className="text-white font-medium">150+ 个工具包</span> 解决剧本创作中的所有问题。
+              豆瓣 <span className="font-medium">8 分以上</span> 及 <span className="font-medium">票房过亿</span> 作品的编剧担任剧本监制。
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+              <a href="#pricing" className="inline-flex items-center gap-2 rounded-full bg-white text-black px-6 py-3 font-medium hover:opacity-90 transition">
+                查看报价 <ArrowRight className="h-4 w-4"/>
+              </a>
+              <a href="#features" className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-white/90 hover:bg-white/10 transition">
+                了解能力矩阵
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">报价单</h2>
+          <p className="mt-3 text-white/70">透明清晰 · 苹果式极简体验 · 支持项目化与批量定制</p>
+        </div>
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <PriceCard
+            icon={<Film className="h-6 w-6"/>}
+            title="定制电影剧本"
+            price="￥398,000 起"
+            highlight
+            bullets={[
+              "从故事创意到拍摄中极速调整",
+              "后期剪辑极速调整",
+              "送审报备修改全覆盖",
+              "豆瓣8+ / 票房过亿 编剧监制",
+            ]}
+            badge="旗舰推荐"
+          />
+          <PriceCard
+            icon={<Clapperboard className="h-6 w-6"/>}
+            title="定制中剧类（≤200分钟）"
+            price="￥198,000 起"
+            bullets={["涵盖全流程直至上线调整", "适配平台标准与审查规范", "项目经理一对一推进"]}
+          />
+          <PriceCard
+            icon={<Layers className="h-6 w-6"/>}
+            title="定制长剧类"
+            price="￥100,000 / 集 起"
+            bullets={["剧集工业化大纲与分集设计", "编审双轨制保障质量", "台词风格与人设一致性校准"]}
+          />
+          <PriceCard
+            icon={<Rocket className="h-6 w-6"/>}
+            title="定制微短剧"
+            price="￥39,800 / 部 起"
+            bullets={["强钩子·高爽点·快节奏", "投流物料联动与转化校验", "≥10部批量定制享优惠"]}
+            note="批量（10部及以上）可享阶梯优惠"
+          />
+        </div>
+        <div className="mt-6 text-center text-sm text-white/70">* 所有价格为起步价，具体报价以需求评估与工作量测算为准。</div>
+      </section>
+
+      {/* Feature Matrix */}
+      <section id="features" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">能力矩阵 · 150+ 工具包</h2>
+          <p className="mt-3 text-white/70">覆盖从创意、结构、人物、类型，到拍摄中与上线后的全链路。</p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            {title:"结构与节奏引擎", desc:"三幕/八序列/丹纳蒙特混合模板，自动生成多版本结构建议。"},
+            {title:"心理学验证", desc:"情绪曲线·多巴胺/催产素/去甲肾上腺素触发点校准。"},
+            {title:"角色与关系系统", desc:"人物动机-冲突-转化闭环，MBTI与原型映射。"},
+            {title:"类型片模板库", desc:"犯罪、悬疑、情感、科幻等 60+ 类型混搭最佳实践。"},
+            {title:"高光点与付费点设计", desc:"短剧专用爆款公式与留存/转化优化。"},
+            {title:"合规与送审助手", desc:"平台规范与审查要点对照，提前规避风险。"},
+            {title:"拍摄中极速调整", desc:"桌读/试拍/粗剪反馈 24h 内生成修订建议。"},
+            {title:"后期剪辑优化", desc:"节奏重构、桥段替换、口播/旁白补强建议。"},
+            {title:"上线策略联动", desc:"宣发物料文案/海报标语/预告节奏联动校准。"},
+          ].map((f, i) => (
+            <FeatureCard key={i} title={f.title} desc={f.desc} />
+          ))}
+        </div>
+      </section>
+
+      {/* Process */}
+      <section id="process" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">服务流程</h2>
+          <p className="mt-3 text-white/70">全流程至上线调整 · 每一步都有标准化产出与验收节点。</p>
+        </div>
+        <ol className="relative border-s border-white/10 max-w-3xl mx-auto pl-6">
+          {[
+            "咨询与需求澄清（免费）",
+            "签约立项 · 时间表与交付物约定",
+            "故事母题 & 人设工作坊",
+            "大纲/分集/场景表输出",
+            "剧本推进 & 桌读反馈修订",
+            "拍摄中极速调整（片场/试拍/粗剪）",
+            "后期剪辑极速调整（节奏/旁白/结构）",
+            "送审报备修改 · 合规校验",
+            "上线调整 & 复盘报告",
+          ].map((step, idx) => (
+            <li key={idx} className="mb-8 ms-6">
+              <span className="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-white text-black text-xs font-bold">{idx+1}</span>
+              <h3 className="font-medium">{step}</h3>
+              <p className="text-white/60 text-sm mt-1">标准交付物 · 项目经理对接 · 私密仓库同步版本</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Guarantees */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="grid md:grid-cols-3 gap-6">
+          <Guarantee title="专业监制" icon={<Shield className="h-5 w-5"/>} desc="豆瓣8分+、票房过亿作品的编剧担任剧本监制，质量闭环把关。"/>
+          <Guarantee title="工业化协作" icon={<Workflow className="h-5 w-5"/>} desc="标准版本树与变更日志，创作更快、沟通更少、决策更清晰。"/>
+          <Guarantee title="私密与合规" icon={<Shield className="h-5 w-5"/>} desc="全程严格保密协定（NDA）与送审合规清单，降低项目风险。"/>
+        </div>
+      </section>
+
+      {/* CTA / Contact */}
+      <section id="contact" className="relative">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.1),_transparent_55%)]"/>
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <h3 className="text-2xl md:text-3xl font-semibold">告诉我们你的项目</h3>
+          <p className="mt-3 text-white/70">留下需求要点（题材/体量/周期/平台），我们将在 24 小时内给到初步方案与报价区间。</p>
+          <div className="mt-8 grid sm:grid-cols-2 gap-3">
+            <a href="mailto:hello@blackhole.ai" className="rounded-xl bg-white text-black px-6 py-4 font-medium hover:opacity-90 transition flex items-center justify-center gap-2"><MessageCircle className="h-5 w-5"/> 发送邮件</a>
+            <a href="#" className="rounded-xl border border-white/20 px-6 py-4 hover:bg-white/10 transition">或添加微信/WhatsApp：请在留言备注</a>
+          </div>
+          <p className="mt-3 text-xs text-white/50">也可提供发票与正规合同；支持海内外项目合作。</p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">常见问题</h2>
+          <p className="mt-3 text-white/70">如有更多问题，欢迎直接联系。</p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <FAQ q="交付周期多久？" a="取决于体量与复杂度。电影剧本通常 3–6 周起，长剧类按集并行推进，微短剧可批量流水线加速。"/>
+          <FAQ q="价格会如何细化？" a="基于需求澄清后按工作量测算，提供拆项报价（梗概/大纲/分集/成稿/调整/送审），并明确里程碑与验收标准。"/>
+          <FAQ q="版权与署名？" a="默认甲方独占版权，我们保留技术与流程方法论。署名与监制署名可按平台规则与合同约定执行。"/>
+          <FAQ q="是否支持保密？" a="全流程签署 NDA，内部权限分级与加密仓库存取，严格保护项目信息。"/>
+          <FAQ q="可以做哪些增值服务？" a="票房/留存预测、投流物料共创、合拍/联合出品咨询、选角AI试镜、宣发话术库与预告编排等。"/>
+          <FAQ q="如何享受批量优惠？" a="微短剧≥10部或长剧≥12集可申请阶梯折扣，具体折扣与排期以实际评估为准。"/>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-white/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div className="font-medium text-white">黑洞AI编剧工作室</div>
+            <div className="mt-1">© {new Date().getFullYear()} Black Hole AI. All rights reserved.</div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-3 md:items-center">
+            <a className="hover:text-white" href="#pricing">报价</a>
+            <a className="hover:text-white" href="#features">能力</a>
+            <a className="hover:text-white" href="#process">流程</a>
+            <a className="hover:text-white" href="#faq">FAQ</a>
+            <a className="hover:text-white" href="#contact">联系</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function PriceCard({ icon, title, price, bullets, badge, note, highlight }: {
+  icon: React.ReactNode;
+  title: string;
+  price: string;
+  bullets: string[];
+  badge?: string;
+  note?: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div className={`relative rounded-2xl p-6 border ${highlight ? "border-white/30 bg-white/[0.06]" : "border-white/10 bg-white/[0.03]"} backdrop-blur transition hover:border-white/30` }>
+      {badge && (
+        <div className="absolute -top-3 right-4 rounded-full bg-white text-black text-xs font-semibold px-2 py-1">{badge}</div>
+      )}
+      <div className="flex items-center gap-3 text-white/90">
+        <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center">{icon}</div>
+        <h3 className="font-semibold text-lg">{title}</h3>
+      </div>
+      <div className="mt-4 text-2xl font-semibold">{price}</div>
+      <ul className="mt-4 space-y-2 text-sm text-white/80">
+        {bullets.map((b, i) => (
+          <li key={i} className="flex gap-2"><Check className="h-4 w-4 mt-0.5 text-white/70"/> <span>{b}</span></li>
+        ))}
+      </ul>
+      {note && <div className="mt-4 text-xs text-white/60">{note}</div>}
+      <a href="#contact" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white text-black px-4 py-2 font-medium hover:opacity-90 transition">
+        立即咨询 <ArrowRight className="h-4 w-4"/>
+      </a>
+    </div>
+  );
+}
+
+function FeatureCard({ title, desc }: { title: string; desc: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur hover:border-white/30 transition">
+      <div className="flex items-center gap-2 mb-2 text-white">
+        <div className="h-6 w-6 rounded-md bg-white/10 flex items-center justify-center"><Sparkles className="h-4 w-4"/></div>
+        <h3 className="font-medium">{title}</h3>
+      </div>
+      <p className="text-sm text-white/70">{desc}</p>
+    </div>
+  );
+}
+
+function Guarantee({ title, desc, icon }: { title: string; desc: string; icon: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+      <div className="flex items-center gap-2 text-white mb-2">
+        <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">{icon}</div>
+        <h3 className="font-medium">{title}</h3>
+      </div>
+      <p className="text-white/70 text-sm">{desc}</p>
+    </div>
+  );
+}
+
+function FAQ({ q, a }: { q: string; a: string }) {
+  return (
+    <details className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur group">
+      <summary className="cursor-pointer list-none flex items-center justify-between gap-4">
+        <span className="font-medium">{q}</span>
+        <span className="text-white/60 group-open:rotate-180 transition">⌄</span>
+      </summary>
+      <p className="mt-3 text-sm text-white/70">{a}</p>
+    </details>
+  );
+}
