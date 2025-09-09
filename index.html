@@ -1,11 +1,361 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { Check, Sparkles, Rocket, Shield, MessageCircle, ArrowRight, Zap, Film, Clapperboard, Layers, Workflow } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Check,
+  Sparkles,
+  Rocket,
+  Shield,
+  MessageCircle,
+  ArrowRight,
+  Zap,
+  Film,
+  Clapperboard,
+  Layers,
+  Workflow,
+  X,
+  Info,
+} from "lucide-react";
 
 // Apple-like landing page for 黑洞AI编剧工作室（中文）
 // Tailwind + shadcn/ui ready. Single-file React component.
+// ——交互增强点：
+// 1) 所有一级模块中的卡片/步骤都能点开，右侧抽屉展示“二级页面”详情。
+// 2) 顶部导航栏新增“工作台按钮”，可快速回到顶部。
+// 3) 联系方式统一：微信：sczhujiao  邮箱：kurtsun2201@gmail.com
+// 4) 支持复制微信号、一键mailto。
 
 export default function LandingPage() {
+  const [panel, setPanel] = React.useState(null as null | {
+    type: "pricing" | "feature" | "process" | "guarantee";
+    id: string;
+  });
+
+  const openPanel = (p: { type: any; id: string }) => setPanel(p as any);
+  const closePanel = () => setPanel(null);
+
+  // 数据：定价（一级） + 详情（二级）
+  const pricing = [
+    {
+      id: "film",
+      icon: <Film className="h-6 w-6" />,
+      title: "定制电影剧本",
+      price: "￥398,000 起",
+      bullets: [
+        "从故事创意到拍摄中极速调整",
+        "后期剪辑极速调整",
+        "送审报备修改全覆盖",
+        "豆瓣8+ / 票房过亿 编剧监制",
+      ],
+      badge: "旗舰推荐",
+      note: "",
+      detail: {
+        headline: "电影剧本定制 · 工业化监制",
+        points: [
+          "交付物：梗概 / 大纲 / 分场 / 成稿 (Final Draft / PDF)",
+          "监制机制：周度评审 + 版本树追踪 + 变更日志",
+          "现场支持：桌读、试拍与粗剪的 24h 建议回传",
+          "合规：平台送审要点对照与风险提示",
+        ],
+      },
+    },
+    {
+      id: "mid",
+      icon: <Clapperboard className="h-6 w-6" />,
+      title: "定制中剧类（≤200分钟）",
+      price: "￥198,000 起",
+      bullets: [
+        "涵盖全流程直至上线调整",
+        "适配平台标准与审查规范",
+        "项目经理一对一推进",
+      ],
+      note: "",
+      detail: {
+        headline: "中剧类 · 全流程到上线",
+        points: [
+          "结构：三幕/八序列/节拍表多版本比选",
+          "风格校准：人设表 + 台词样式对照",
+          "上线联动：物料语气统一、预告节奏建议",
+        ],
+      },
+    },
+    {
+      id: "long",
+      icon: <Layers className="h-6 w-6" />,
+      title: "定制长剧类",
+      price: "￥100,000 / 集 起",
+      bullets: [
+        "剧集工业化大纲与分集设计",
+        "编审双轨制保障质量",
+        "台词风格与人设一致性校准",
+      ],
+      note: "",
+      detail: {
+        headline: "长剧类 · 分集并行",
+        points: [
+          "流水线：分集并行 + 统一母题",
+          "质量：编剧/审读双轨 + 场景节拍表",
+          "迭代：桌读-试拍-粗剪的快速回路",
+        ],
+      },
+    },
+    {
+      id: "short",
+      icon: <Rocket className="h-6 w-6" />,
+      title: "定制微短剧",
+      price: "￥39,800 / 部 起",
+      bullets: [
+        "强钩子·高爽点·快节奏",
+        "投流物料联动与转化校验",
+        "≥10部批量定制享优惠",
+      ],
+      note: "批量（10部及以上）可享阶梯优惠",
+      detail: {
+        headline: "微短剧 · 爆款机制",
+        points: [
+          "心理触发：多巴胺/催产素/去甲肾上腺素三曲线",
+          "转化：高光点/付费点地图 + 留存指标追踪",
+          "批量：主题矩阵与角色模板库",
+        ],
+      },
+    },
+  ];
+
+  const features = [
+    {
+      id: "structure",
+      title: "结构与节奏引擎",
+      desc: "三幕/八序列/丹纳蒙特混合模板，自动生成多版本结构建议。",
+      detail: {
+        headline: "结构与节奏引擎 · 进阶",
+        blocks: [
+          {
+            title: "模板库",
+            body:
+              "内置三幕、八序列、英雄旅程、丹纳蒙特等框架，支持混合调用与节拍对齐。",
+          },
+          {
+            title: "版本对比",
+            body:
+              "自动输出 A/B/C 结构草案与节奏热力图，辅助决策。",
+          },
+          {
+            title: "验收标准",
+            body: "关键节点到达时间、强钩子覆盖率、情感峰值分布。",
+          },
+        ],
+      },
+    },
+    {
+      id: "psy",
+      title: "心理学验证",
+      desc: "情绪曲线·多巴胺/催产素/去甲肾上腺素触发点校准。",
+      detail: {
+        headline: "心理学验证 · 情绪与留存",
+        blocks: [
+          { title: "生理-叙事耦合", body: "以三神经递质的触发点标注场景。" },
+          { title: "观众分群", body: "受众画像 × 触发模板匹配，优化留存与转化。" },
+          { title: "实验回路", body: "试读/小样投放的反馈快速闭环。" },
+        ],
+      },
+    },
+    {
+      id: "chars",
+      title: "角色与关系系统",
+      desc: "人物动机-冲突-转化闭环，MBTI与原型映射。",
+      detail: {
+        headline: "角色系统 · 可溯源",
+        blocks: [
+          { title: "动机树", body: "基本欲望→显性目标→隐形需求的因果链。" },
+          { title: "关系网", body: "冲突矩阵与人物弧光反向验证。" },
+          { title: "台词样式", body: "MBTI×原型词库，统一语气。" },
+        ],
+      },
+    },
+    {
+      id: "templates",
+      title: "类型片模板库",
+      desc: "犯罪、悬疑、情感、科幻等 60+ 类型混搭最佳实践。",
+      detail: {
+        headline: "类型片模板库 · 混搭",
+        blocks: [
+          { title: "套路地图", body: "高频桥段与反套路清单。" },
+          { title: "跨类型融合", body: "主次类型节奏对齐策略。" },
+          { title: "审查友好", body: "敏感点提醒与替代方案。" },
+        ],
+      },
+    },
+    {
+      id: "peaks",
+      title: "高光点与付费点设计",
+      desc: "短剧专用爆款公式与留存/转化优化。",
+      detail: {
+        headline: "高光点/付费点 · 地图",
+        blocks: [
+          { title: "爽点分布", body: "每2-3分钟一次峰值，防止流失。" },
+          { title: "付费钩子", body: "悬念断点与情绪未完成性。" },
+          { title: "数据回填", body: "上线后行为数据反校准下一批。" },
+        ],
+      },
+    },
+    {
+      id: "compliance",
+      title: "合规与送审助手",
+      desc: "平台规范与审查要点对照，提前规避风险。",
+      detail: {
+        headline: "合规助手 · 清单化",
+        blocks: [
+          { title: "平台差异", body: "多平台敏感点与替代表达。" },
+          { title: "送审包", body: "梗概/大纲/说明书/风险点列表。" },
+          { title: "闭环", body: "送审意见→快速修订→二次校验。" },
+        ],
+      },
+    },
+    {
+      id: "onset",
+      title: "拍摄中极速调整",
+      desc: "桌读/试拍/粗剪反馈 24h 内生成修订建议。",
+      detail: {
+        headline: "片场加速 · 24h 回传",
+        blocks: [
+          { title: "桌读修订", body: "口播、节拍、转场即时优化。" },
+          { title: "粗剪重排", body: "情节重排与补强旁白建议。" },
+          { title: "替代桥段", body: "拍摄条件受限下的 Plan B。" },
+        ],
+      },
+    },
+    {
+      id: "post",
+      title: "后期剪辑优化",
+      desc: "节奏重构、桥段替换、口播/旁白补强建议。",
+      detail: {
+        headline: "后期优化 · 节奏重构",
+        blocks: [
+          { title: "节奏图", body: "峰谷序列化，打磨情绪走向。" },
+          { title: "桥段替换", body: "因果链不丢失的前后位移。" },
+          { title: "旁白策略", body: "信息密度与情绪密度平衡。" },
+        ],
+      },
+    },
+    {
+      id: "launch",
+      title: "上线策略联动",
+      desc: "宣发物料文案/海报标语/预告节奏联动校准。",
+      detail: {
+        headline: "上线联动 · 一体化",
+        blocks: [
+          { title: "物料语气", body: "文宣与剧情语气统一。" },
+          { title: "预告编排", body: "三支预告的节奏各司其职。" },
+          { title: "复盘", body: "数据复盘→下一项目模板更新。" },
+        ],
+      },
+    },
+  ];
+
+  const processSteps = [
+    "咨询与需求澄清（免费）",
+    "签约立项 · 时间表与交付物约定",
+    "故事母题 & 人设工作坊",
+    "大纲/分集/场景表输出",
+    "剧本推进 & 桌读反馈修订",
+    "拍摄中极速调整（片场/试拍/粗剪）",
+    "后期剪辑极速调整（节奏/旁白/结构）",
+    "送审报备修改 · 合规校验",
+    "上线调整 & 复盘报告",
+  ].map((t, i) => ({ id: `p${i + 1}`, title: t }));
+
+  const guarantees = [
+    {
+      id: "pro",
+      title: "专业监制",
+      icon: <Shield className="h-5 w-5" />,
+      desc: "豆瓣8分+、票房过亿作品的编剧担任剧本监制，质量闭环把关。",
+      detail: {
+        headline: "专业监制 · 质量门",
+        body:
+          "通过周度评审、里程碑验收与黑名单条目，确保关键节点质量。",
+      },
+    },
+    {
+      id: "flow",
+      title: "工业化协作",
+      icon: <Workflow className="h-5 w-5" />,
+      desc: "标准版本树与变更日志，创作更快、沟通更少、决策更清晰。",
+      detail: {
+        headline: "工业化协作 · 透明",
+        body: "版本树与变更日志统一托管，所有意见闭环追踪。",
+      },
+    },
+    {
+      id: "sec",
+      title: "私密与合规",
+      icon: <Shield className="h-5 w-5" />,
+      desc: "全程严格保密协定（NDA）与送审合规清单，降低项目风险。",
+      detail: {
+        headline: "私密与合规 · 风控",
+        body: "权限分级、加密仓库与送审清单三层保障。",
+      },
+    },
+  ];
+
+  // 抽屉面板渲染
+  const renderPanelBody = () => {
+    if (!panel) return null;
+    const { type, id } = panel;
+
+    if (type === "pricing") {
+      const item = pricing.find((p) => p.id === id)!;
+      return (
+        <PanelContent
+          title={item.title}
+          subtitle={item.price}
+          headline={item.detail.headline}
+          points={item.detail.points}
+        />
+      );
+    }
+    if (type === "feature") {
+      const item = features.find((f) => f.id === id)!;
+      return (
+        <PanelBlocks
+          title={item.title}
+          headline={item.detail.headline}
+          blocks={item.detail.blocks}
+        />
+      );
+    }
+    if (type === "process") {
+      const step = processSteps.find((s) => s.id === id)!;
+      return (
+        <PanelContent
+          title={step.title}
+          headline="该阶段的标准化产出"
+          points={[
+            "阶段目标与通过条件",
+            "必交文档与样例模板",
+            "常见问题与风险提示",
+          ]}
+        />
+      );
+    }
+    if (type === "guarantee") {
+      const g = guarantees.find((g) => g.id === id)!;
+      return (
+        <PanelPlain title={g.title} headline={g.detail.headline} body={g.detail.body} />
+      );
+    }
+    return null;
+  };
+
+  // 复制工具
+  const copy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("已复制到剪贴板：" + text);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-black text-white">
       {/* Nav */}
@@ -60,38 +410,19 @@ export default function LandingPage() {
           <p className="mt-3 text-white/70">透明清晰 · 苹果式极简体验 · 支持项目化与批量定制</p>
         </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          <PriceCard
-            icon={<Film className="h-6 w-6"/>}
-            title="定制电影剧本"
-            price="￥398,000 起"
-            highlight
-            bullets={[
-              "从故事创意到拍摄中极速调整",
-              "后期剪辑极速调整",
-              "送审报备修改全覆盖",
-              "豆瓣8+ / 票房过亿 编剧监制",
-            ]}
-            badge="旗舰推荐"
-          />
-          <PriceCard
-            icon={<Clapperboard className="h-6 w-6"/>}
-            title="定制中剧类（≤200分钟）"
-            price="￥198,000 起"
-            bullets={["涵盖全流程直至上线调整", "适配平台标准与审查规范", "项目经理一对一推进"]}
-          />
-          <PriceCard
-            icon={<Layers className="h-6 w-6"/>}
-            title="定制长剧类"
-            price="￥100,000 / 集 起"
-            bullets={["剧集工业化大纲与分集设计", "编审双轨制保障质量", "台词风格与人设一致性校准"]}
-          />
-          <PriceCard
-            icon={<Rocket className="h-6 w-6"/>}
-            title="定制微短剧"
-            price="￥39,800 / 部 起"
-            bullets={["强钩子·高爽点·快节奏", "投流物料联动与转化校验", "≥10部批量定制享优惠"]}
-            note="批量（10部及以上）可享阶梯优惠"
-          />
+          {pricing.map((p, idx) => (
+            <PriceCard
+              key={p.id}
+              icon={p.icon}
+              title={p.title}
+              price={p.price}
+              bullets={p.bullets}
+              badge={p.badge as any}
+              note={p.note}
+              highlight={idx === 0}
+              onOpen={() => openPanel({ type: "pricing", id: p.id })}
+            />
+          ))}
         </div>
         <div className="mt-6 text-center text-sm text-white/70">* 所有价格为起步价，具体报价以需求评估与工作量测算为准。</div>
       </section>
@@ -103,18 +434,8 @@ export default function LandingPage() {
           <p className="mt-3 text-white/70">覆盖从创意、结构、人物、类型，到拍摄中与上线后的全链路。</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            {title:"结构与节奏引擎", desc:"三幕/八序列/丹纳蒙特混合模板，自动生成多版本结构建议。"},
-            {title:"心理学验证", desc:"情绪曲线·多巴胺/催产素/去甲肾上腺素触发点校准。"},
-            {title:"角色与关系系统", desc:"人物动机-冲突-转化闭环，MBTI与原型映射。"},
-            {title:"类型片模板库", desc:"犯罪、悬疑、情感、科幻等 60+ 类型混搭最佳实践。"},
-            {title:"高光点与付费点设计", desc:"短剧专用爆款公式与留存/转化优化。"},
-            {title:"合规与送审助手", desc:"平台规范与审查要点对照，提前规避风险。"},
-            {title:"拍摄中极速调整", desc:"桌读/试拍/粗剪反馈 24h 内生成修订建议。"},
-            {title:"后期剪辑优化", desc:"节奏重构、桥段替换、口播/旁白补强建议。"},
-            {title:"上线策略联动", desc:"宣发物料文案/海报标语/预告节奏联动校准。"},
-          ].map((f, i) => (
-            <FeatureCard key={i} title={f.title} desc={f.desc} />
+          {features.map((f) => (
+            <FeatureCard key={f.id} title={f.title} desc={f.desc} onOpen={() => openPanel({ type: "feature", id: f.id })}/>
           ))}
         </div>
       </section>
@@ -126,20 +447,12 @@ export default function LandingPage() {
           <p className="mt-3 text-white/70">全流程至上线调整 · 每一步都有标准化产出与验收节点。</p>
         </div>
         <ol className="relative border-s border-white/10 max-w-3xl mx-auto pl-6">
-          {[
-            "咨询与需求澄清（免费）",
-            "签约立项 · 时间表与交付物约定",
-            "故事母题 & 人设工作坊",
-            "大纲/分集/场景表输出",
-            "剧本推进 & 桌读反馈修订",
-            "拍摄中极速调整（片场/试拍/粗剪）",
-            "后期剪辑极速调整（节奏/旁白/结构）",
-            "送审报备修改 · 合规校验",
-            "上线调整 & 复盘报告",
-          ].map((step, idx) => (
-            <li key={idx} className="mb-8 ms-6">
-              <span className="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-white text-black text-xs font-bold">{idx+1}</span>
-              <h3 className="font-medium">{step}</h3>
+          {processSteps.map((step, idx) => (
+            <li key={step.id} className="mb-8 ms-6">
+              <span className="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-white text-black text-xs font-bold">{idx + 1}</span>
+              <button onClick={() => openPanel({ type: "process", id: step.id })} className="font-medium hover:underline text-left">
+                {step.title}
+              </button>
               <p className="text-white/60 text-sm mt-1">标准交付物 · 项目经理对接 · 私密仓库同步版本</p>
             </li>
           ))}
@@ -149,9 +462,9 @@ export default function LandingPage() {
       {/* Guarantees */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
         <div className="grid md:grid-cols-3 gap-6">
-          <Guarantee title="专业监制" icon={<Shield className="h-5 w-5"/>} desc="豆瓣8分+、票房过亿作品的编剧担任剧本监制，质量闭环把关。"/>
-          <Guarantee title="工业化协作" icon={<Workflow className="h-5 w-5"/>} desc="标准版本树与变更日志，创作更快、沟通更少、决策更清晰。"/>
-          <Guarantee title="私密与合规" icon={<Shield className="h-5 w-5"/>} desc="全程严格保密协定（NDA）与送审合规清单，降低项目风险。"/>
+          {guarantees.map((g) => (
+            <Guarantee key={g.id} title={g.title} desc={g.desc} icon={g.icon} onOpen={() => openPanel({ type: "guarantee", id: g.id })} />
+          ))}
         </div>
       </section>
 
@@ -162,8 +475,10 @@ export default function LandingPage() {
           <h3 className="text-2xl md:text-3xl font-semibold">告诉我们你的项目</h3>
           <p className="mt-3 text-white/70">留下需求要点（题材/体量/周期/平台），我们将在 24 小时内给到初步方案与报价区间。</p>
           <div className="mt-8 grid sm:grid-cols-2 gap-3">
-            <a href="mailto:hello@blackhole.ai" className="rounded-xl bg-white text-black px-6 py-4 font-medium hover:opacity-90 transition flex items-center justify-center gap-2"><MessageCircle className="h-5 w-5"/> 发送邮件</a>
-            <a href="#" className="rounded-xl border border-white/20 px-6 py-4 hover:bg-white/10 transition">或添加微信/WhatsApp：请在留言备注</a>
+            <a href="mailto:kurtsun2201@gmail.com" className="rounded-xl bg-white text-black px-6 py-4 font-medium hover:opacity-90 transition flex items-center justify-center gap-2"><MessageCircle className="h-5 w-5"/> 发送邮件：kurtsun2201@gmail.com</a>
+            <button onClick={() => copy("sczhujiao")} className="rounded-xl border border-white/20 px-6 py-4 hover:bg-white/10 transition flex items-center justify-center gap-2">
+              <Info className="h-5 w-5"/> 微信：sczhujiao（点击复制）
+            </button>
           </div>
           <p className="mt-3 text-xs text-white/50">也可提供发票与正规合同；支持海内外项目合作。</p>
         </div>
@@ -201,11 +516,44 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* 二级页面抽屉 */}
+      <AnimatePresence>
+        {panel && (
+          <motion.aside
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 260, damping: 30 }}
+            className="fixed top-0 right-0 bottom-0 w-full sm:w-[520px] bg-black/95 backdrop-blur border-l border-white/10 z-[60] flex flex-col"
+            role="dialog"
+            aria-modal
+          >
+            <div className="flex items-center justify-between h-16 px-4 sm:px-6 border-b border-white/10">
+              <div className="flex items-center gap-2 text-white/80">
+                <Info className="h-5 w-5" />
+                <span>详细信息</span>
+              </div>
+              <button onClick={closePanel} className="rounded-lg p-2 hover:bg-white/10"><X className="h-5 w-5"/></button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+              {renderPanelBody()}
+            </div>
+            <div className="border-t border-white/10 p-4 sm:p-6 flex flex-col gap-2">
+              <div className="text-xs text-white/50">咨询与联系</div>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <a href="mailto:kurtsun2201@gmail.com" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-black px-4 py-2 text-sm font-medium hover:opacity-90 transition"><MessageCircle className="h-4 w-4"/> 邮箱：kurtsun2201@gmail.com</a>
+                <button onClick={() => copy("sczhujiao")} className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/10 transition">微信：sczhujiao（复制）</button>
+              </div>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-function PriceCard({ icon, title, price, bullets, badge, note, highlight }: {
+function PriceCard({ icon, title, price, bullets, badge, note, highlight, onOpen }: {
   icon: React.ReactNode;
   title: string;
   price: string;
@@ -213,9 +561,10 @@ function PriceCard({ icon, title, price, bullets, badge, note, highlight }: {
   badge?: string;
   note?: string;
   highlight?: boolean;
+  onOpen?: () => void;
 }) {
   return (
-    <div className={`relative rounded-2xl p-6 border ${highlight ? "border-white/30 bg-white/[0.06]" : "border-white/10 bg-white/[0.03]"} backdrop-blur transition hover:border-white/30` }>
+    <div onClick={onOpen} className={`relative rounded-2xl p-6 border ${highlight ? "border-white/30 bg-white/[0.06]" : "border-white/10 bg-white/[0.03]"} backdrop-blur transition hover:border-white/30 cursor-pointer`}>
       {badge && (
         <div className="absolute -top-3 right-4 rounded-full bg-white text-black text-xs font-semibold px-2 py-1">{badge}</div>
       )}
@@ -230,34 +579,36 @@ function PriceCard({ icon, title, price, bullets, badge, note, highlight }: {
         ))}
       </ul>
       {note && <div className="mt-4 text-xs text-white/60">{note}</div>}
-      <a href="#contact" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white text-black px-4 py-2 font-medium hover:opacity-90 transition">
-        立即咨询 <ArrowRight className="h-4 w-4"/>
-      </a>
+      <div className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white text-black px-4 py-2 font-medium hover:opacity-90 transition">
+        了解详情 <ArrowRight className="h-4 w-4"/>
+      </div>
     </div>
   );
 }
 
-function FeatureCard({ title, desc }: { title: string; desc: string }) {
+function FeatureCard({ title, desc, onOpen }: { title: string; desc: string; onOpen?: () => void }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur hover:border-white/30 transition">
+    <button onClick={onOpen} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur hover:border-white/30 transition text-left w-full">
       <div className="flex items-center gap-2 mb-2 text-white">
         <div className="h-6 w-6 rounded-md bg-white/10 flex items-center justify-center"><Sparkles className="h-4 w-4"/></div>
         <h3 className="font-medium">{title}</h3>
       </div>
       <p className="text-sm text-white/70">{desc}</p>
-    </div>
+      <div className="mt-4 inline-flex items-center gap-1 text-xs text-white/60">查看详情 <ArrowRight className="h-3.5 w-3.5"/></div>
+    </button>
   );
 }
 
-function Guarantee({ title, desc, icon }: { title: string; desc: string; icon: React.ReactNode }) {
+function Guarantee({ title, desc, icon, onOpen }: { title: string; desc: string; icon: React.ReactNode; onOpen?: () => void }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur">
+    <button onClick={onOpen} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur text-left hover:border-white/30 transition w-full">
       <div className="flex items-center gap-2 text-white mb-2">
         <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center">{icon}</div>
         <h3 className="font-medium">{title}</h3>
       </div>
       <p className="text-white/70 text-sm">{desc}</p>
-    </div>
+      <div className="mt-4 inline-flex items-center gap-1 text-xs text-white/60">查看详情 <ArrowRight className="h-3.5 w-3.5"/></div>
+    </button>
   );
 }
 
@@ -270,5 +621,47 @@ function FAQ({ q, a }: { q: string; a: string }) {
       </summary>
       <p className="mt-3 text-sm text-white/70">{a}</p>
     </details>
+  );
+}
+
+function PanelContent({ title, subtitle, headline, points }: { title: string; subtitle?: string; headline: string; points: string[] }) {
+  return (
+    <div>
+      <h3 className="text-xl font-semibold">{title}</h3>
+      {subtitle && <div className="text-white/60 mt-1">{subtitle}</div>}
+      <div className="mt-6 text-white/80">{headline}</div>
+      <ul className="mt-3 space-y-2 text-sm text-white/70">
+        {points.map((p, i) => (
+          <li key={i} className="flex gap-2"><Check className="h-4 w-4 mt-0.5 text-white/60"/> <span>{p}</span></li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function PanelBlocks({ title, headline, blocks }: { title: string; headline: string; blocks: { title: string; body: string }[] }) {
+  return (
+    <div>
+      <h3 className="text-xl font-semibold">{title}</h3>
+      <div className="text-white/60 mt-1">{headline}</div>
+      <div className="mt-4 space-y-4">
+        {blocks.map((b, i) => (
+          <div key={i} className="rounded-xl border border-white/10 p-4">
+            <div className="font-medium">{b.title}</div>
+            <p className="text-sm text-white/70 mt-1">{b.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PanelPlain({ title, headline, body }: { title: string; headline: string; body: string }) {
+  return (
+    <div>
+      <h3 className="text-xl font-semibold">{title}</h3>
+      <div className="text-white/60 mt-1">{headline}</div>
+      <p className="text-sm text-white/70 mt-3 leading-6">{body}</p>
+    </div>
   );
 }
